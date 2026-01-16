@@ -1,47 +1,63 @@
-# Zsh Configuration Modules
+# ZSH Module
 
-This directory contains modular zsh configuration files that are automatically imported by `default.nix`.
+A modular Nix configuration for ZSH with sensible defaults, custom functions, and tool integrations.
 
-## Module Overview
+## Features
 
 ### Core Configuration
-- **[default.nix](default.nix)** - Main orchestrator that imports all other modules and sets base zsh configuration
-- **[aliases.nix](aliases.nix)** - Public shell aliases (committed to git)
-- **[aliases.private.nix](aliases.private.nix.template)** - Private work aliases (gitignored, use template to create)
+- Auto-completion and syntax highlighting
+- Smart autosuggestions with history-based completion
+- Shared command history across all sessions (10,000 entries)
+- Interactive comments support
+- Steady bar cursor style
+
+### Directory Navigation
+- `auto_cd` - Type directory names to navigate without `cd`
+- `auto_pushd` - Automatic directory stack management
+- Enhanced directory history with `cd -`, `cd -2`, etc.
+
+### Tool Integrations
+- **Starship** - Modern cross-shell prompt
+- **direnv** - Automatic environment variable loading from `.envrc` files
+- **mise** - Runtime version manager (replaces asdf/rtx)
+
+### Aliases
+- `ls` - Colorized ls output
+- `vi` - Launches nvim
+- `k` - kubectl shortcut
+- `k9s` - Launches k9s without logo
+
+### Custom Functions
+
+**Git Workflows**
+- `gp` - Switch to main/master branch and pull latest changes
+- `gps <branch>` - Pull main, switch/create branch, merge main (with auto-stash)
+- `git-rm-br` - Clean up local branches (keeps main/master/current)
+
+**Kubernetes Utilities**
+- `k-oom [limit]` - Find and display OOM-killed pods with detailed info
+
+### Keybindings
+- **Option+Left/Right** - Jump between words (VSCode & terminal compatible)
+- Works in both standard terminals and VSCode integrated terminal
 
 ### Environment
-- **[env.nix](env.nix)** - Environment variables and PATH configuration
-- **[history.nix](history.nix)** - Command history settings (size, deduplication, sharing)
+- `EDITOR` - Set to `code -w` (VSCode)
+- `XDG_CONFIG_HOME` - Set to `$HOME/.config`
+- **PATH additions** - Go, local binaries, npm global, istioctl, Homebrew
 
-### User Experience
-- **[completion.nix](completion.nix)** - Tab completion behavior (case-insensitive, partial matching)
-- **[options.nix](options.nix)** - Shell options (auto-cd, directory stack)
-- **[keybindings.nix](keybindings.nix)** - Keyboard shortcuts (Option+Arrow for word navigation)
+## How It Works
 
-### Functions
-- **[functions.nix](functions.nix)** - Custom shell functions:
-  - `gp` - Git pull main/master branch
-  - `gps` - Git pull and switch to branch (with stash)
-  - `git-rm-br` - Remove all local branches except main/master
-  - `k-oom` - Find OOM-killed Kubernetes pods
+The module uses automatic discovery to keep configuration organized:
 
-### Integrations
-- **[integrations.nix](integrations.nix)** - Third-party tool integrations:
-  - direnv - Automatic environment loading per directory
-  - starship - Cross-shell prompt
-  - mise - Runtime version manager (formerly rtx)
+- [default.nix](default.nix) - Main entry point that automatically imports all `*.nix` files from the `config/` directory
+- [config/functions.nix](config/functions.nix) - Scans `config/functions.d/` and automatically loads all `*.sh` files as shell functions
+- Individual config files ([aliases.nix](config/aliases.nix), [history.nix](config/history.nix), etc.) - Each handles a specific aspect of the shell configuration
 
-## Adding New Modules
+## Adding Custom Functions
 
-Any `.nix` file added to this directory (except `default.nix`) will be automatically imported. No need to update the imports list!
+Simply drop new `.sh` files into [config/functions.d/](config/functions.d/) - they'll be automatically discovered and loaded on shell initialization.
 
-## Private Aliases
+## Customization
 
-1. Copy the template:
-   ```bash
-   cp aliases.private.nix.template aliases.private.nix
-   ```
-
-2. Edit with your work-specific aliases
-
-3. The file is gitignored and will never be committed
+Each config file is self-contained and can be modified independently without touching the main module structure.
