@@ -18,7 +18,7 @@
     # MailerLite shared configuration
     mailerlite = {
       url = "path:/Users/rocriberablasi/.config/mailerlite/nix-config";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
   };
 
