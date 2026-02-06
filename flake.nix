@@ -103,12 +103,9 @@
                   ssh = {
                     username = "roc";
                     use1PasswordAgent = true;
-                    # extraConfig = ''
-                    #   Host *
-                    #     AddKeysToAgent yes
-                    #     UseKeychain yes
-                    #     IdentityFile ~/.ssh/id_rsa
-                    # '';
+                    extraConfig = ''
+                      Include ~/.ssh/private_hosts
+                    '';
                   };
                 };
 
