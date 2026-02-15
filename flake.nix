@@ -74,7 +74,9 @@
             nixpkgs.overlays = overlays;
 
             # Configure mailerlite darwin modules (optional)
-            mailerlite = { };
+            mailerlite = {
+              team = "sre";
+            };
 
             # Home Manager configuration
             home-manager = {
@@ -103,8 +105,10 @@
                   ssh = {
                     username = "roc";
                     use1PasswordAgent = true;
+                    extraIncludes = [ "~/.ssh/private_hosts" ];
                     extraConfig = ''
-                      Include ~/.ssh/private_hosts
+                      Host *
+                        SetEnv TERM=xterm-256color
                     '';
                   };
                 };

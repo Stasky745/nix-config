@@ -29,8 +29,7 @@
         ]
       },
       "locked": {
-        "lastModified": 1768816052,
-        "narHash": "sha256-IwBoW+o+0Gc863nzjgulEPhKpKH3B7zDzBS2WvqvRjU=",
+        "narHash": "sha256-9wJplQhpMC5Qft2guO0sUt2+AI1WbvjJZY37SpCOL1U=",
         "path": "/Users/rocriberablasi/.config/mailerlite/nix-config",
         "type": "path"
       },
