@@ -6,6 +6,7 @@
     enable = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;  # Better Nix integration for direnv
+    config.global.load_dotenv = false;
   };
 
   # Enable starship - cross-shell prompt

@@ -1,18 +1,20 @@
 # Git remove branches (keep main/master/default)
 git-rm-br() {
-    # Get the default branch name from remote
-    local default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+    local default_branch
+    default_branch="$(git_default_branch)" || return 1
 
-    # Fallback if no default branch is set
-    if [[ -z "$default_branch" ]]; then
-        default_branch=$(git branch -r | grep -E 'origin/(main|master)' | head -1 | sed 's/.*origin\///')
+    # Switch to default branch so current branch can be deleted
+    git switch "$default_branch" || return 1
+
+    # Delete all branches except protected ones (-d won't delete unmerged branches)
+    local branches
+    branches=$(git branch --no-color | grep -v -E "(^\*|^  (main|master|''${default_branch})$)")
+
+    if [ -n "$branches" ]; then
+        echo "$branches" | xargs git branch -d
+    else
+        echo "No branches to delete."
     fi
-
-    # Get current branch
-    local current_branch=$(git branch --show-current)
-
-    # Delete all branches except protected ones
-    git branch --no-color | grep -v -E "(^\*|^  (main|master|''${default_branch}|''${current_branch})$)" | xargs -r git branch -d
 
     git branch
 }
