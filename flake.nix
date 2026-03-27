@@ -120,6 +120,7 @@
                     # Add your own packages here
                     # bob # unstable packages
                     # stable.bob # stable packages
+                    tart
                   ]);
 
                 # Your personal home-manager configuration

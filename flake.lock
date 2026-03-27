@@ -105,7 +105,7 @@
         ]
       },
       "locked": {
-        "narHash": "sha256-IjoI3nJgBP87e1KRkuS/VVOA8vovMcoqmZJ/CfUFVXI=",
+        "narHash": "sha256-cDIX81mjx5cB65BrT5cDyNAiJ7neMVfotE78tr2gahw=",
         "path": "/Users/rocriberablasi/.config/mailerlite/nix-config",
         "type": "path"
       },
