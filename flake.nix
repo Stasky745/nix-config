@@ -102,6 +102,7 @@
 
                 # Configure MailerLite modules (optional)
                 mailerlite = {
+		  team = "sre";
                   ssh = {
                     username = "roc";
                     use1PasswordAgent = true;
