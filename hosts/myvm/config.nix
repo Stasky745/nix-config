@@ -1,5 +1,8 @@
 { username, ... }:
 {
+  # ---- Homebrew ------------------------------------------------------------
+  homebrew.enable = true;
+
   # ---- Module enable flags -------------------------------------------------
   my.apps.ghostty.enable = true;
   my.base.zsh.enable     = true;
