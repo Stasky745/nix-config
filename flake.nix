@@ -1,8 +1,8 @@
 {
-  description = "MailerLite SRE Nix Configuration";
+  description = "Nix Configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url        = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
 
     nix-darwin = {
@@ -22,122 +22,24 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-stable, nix-darwin, home-manager, mailerlite, ... }@inputs:
+  outputs = inputs@{ nixpkgs, ... }:
     let
-      system = "aarch64-darwin";
-      username = "rocriberablasi";
-      hostname = "RocsMacBookPro";
-
-      overlays = [
-        (final: _prev: {
-          stable = import nixpkgs-stable {
-            system = final.stdenv.hostPlatform.system;
-            config.allowUnfree = true;
-          };
-        })
-      ];
-
-      pkgs = import nixpkgs {
-        inherit system overlays;
-        config = {
-          allowUnfree = true;
-        };
-      };
+      # Auto-discover all subdirectories of modules/ by name.
+      # Adding a new category (e.g. modules/services/) makes it available
+      # as `modules.services` in every host's imports.nix automatically.
+      modules = builtins.mapAttrs
+        (name: _: ./modules/${name})
+        (builtins.readDir ./modules);
     in
     {
-      darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
-        inherit system;
-        specialArgs = { inherit username hostname mailerlite; };
-        modules = [
-          # Import all MailerLite darwin modules
-          mailerlite.modules.darwin.defaults
-          home-manager.darwinModules.home-manager
-          {
-            # System configuration
-            users.users.${username}.home = "/Users/${username}";
-            system.primaryUser = username;
-
-            # Used for backwards compatibility, please read the changelog before changing.
-            # $ darwin-rebuild changelog
-            system.stateVersion = 6;
-
-            # Nix settings
-            # Disable nix-darwin's Nix management (we use Determinate Nix)
-            nix.enable = false;
-
-            # Don't manage root shell files - Determinate Nix handles /etc/zshenv
-            # Users configure their own shells
-            programs.zsh.enable = false;
-
-            # Allow unfree packages
-            nixpkgs.config.allowUnfree = true;
-            nixpkgs.overlays = overlays;
-
-            # Configure mailerlite darwin modules (optional)
-            mailerlite = {
-              team = "sre";
-            };
-
-            # Home Manager configuration
-            home-manager = {
-              useGlobalPkgs = true;
-              backupFileExtension = "backup";
-              users.${username} = { pkgs, ... }: {
-                home.stateVersion = "25.05";
-                home.enableNixpkgsReleaseCheck = false;
-                # Import all MailerLite home-manager modules
-                imports = [
-                  mailerlite.modules.home-manager.defaults
-                  # Import custom zsh configuration
-                  ./modules/home/zsh
-                ];
-
-                # Workaround: home-manager passes string instead of list to pathsToLink
-                # This broke when nixpkgs started enforcing the list type strictly
-                # https://github.com/nix-community/home-manager/issues/8163
-                targets.darwin.linkApps.enable = false;
-
-                # Disable the broken darwin fonts module (same pathsToLink bug)
-                home.file."Library/Fonts/.home-manager-fonts-version".enable = false;
-
-                # Configure MailerLite modules (optional)
-                mailerlite = {
-		  team = "sre";
-                  ssh = {
-                    username = "roc";
-                    use1PasswordAgent = true;
-                    extraIncludes = [ "~/.ssh/private_hosts" ];
-                    extraConfig = ''
-                      Host *
-                        SetEnv TERM=xterm-256color
-                    '';
-                  };
-                };
-
-                # User packages
-                home.packages =
-                  mailerlite.pkgs.${system}.sre ++
-                  (with pkgs; [
-                    # Add your own packages here
-                    # bob # unstable packages
-                    # stable.bob # stable packages
-                    tart
-                  ]);
-
-                # Your personal home-manager configuration
-                # programs.git.userEmail = "your.name@mailerlite.com";
-              };
-            };
-          }
-        ];
+      darwinConfigurations = {
+        RocsMacBookPro = import ./hosts/RocsMacBookPro/system.nix { inherit inputs modules; };
+        vm             = import ./hosts/vm/system.nix             { inherit inputs modules; };
       };
 
-      # Development shell for working on this config
-      devShells.${system}.default = pkgs.mkShell
-        {
-          buildInputs = with pkgs; [
-            go-task
-          ];
+      devShells."aarch64-darwin".default =
+        nixpkgs.legacyPackages."aarch64-darwin".mkShell {
+          buildInputs = [ nixpkgs.legacyPackages."aarch64-darwin".go-task ];
         };
     };
 }
