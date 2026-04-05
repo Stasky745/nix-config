@@ -34,7 +34,7 @@
     {
       darwinConfigurations = {
         RocsMacBookPro = import ./hosts/RocsMacBookPro/system.nix { inherit inputs modules; };
-        vm             = import ./hosts/vm/system.nix             { inherit inputs modules; };
+        myvm           = import ./hosts/myvm/system.nix            { inherit inputs modules; };
       };
 
       devShells."aarch64-darwin".default =
