@@ -1,7 +1,8 @@
 { username, ... }:
 {
   # ---- Module enable flags -------------------------------------------------
-  my.base.zsh.enable = true;
+  my.apps.ghostty.enable = true;
+  my.base.zsh.enable     = true;
 
   # ---- Home-manager --------------------------------------------------------
   home-manager.users.${username} = { ... }: {
