@@ -31,24 +31,25 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    system.defaults.dock.persistent-apps = lib.mkIf cfg.dock [ "/Applications/Betterbird.app" ];
+    system.defaults.dock.persistent-apps = lib.mkIf cfg.dock [ "/Users/${username}/Applications/Betterbird.app" ];
 
     home-manager.users.${username} = { lib, ... }: {
       home.packages = [ package ];
 
       home.activation.betterbirdSetup = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        APP=$(echo $HOME/.nix-profile/Applications/Betterbird.app)
+        SRC="${package}/Applications/Betterbird.app"
+        DEST="$HOME/Applications/Betterbird.app"
 
-        if [ -d "$APP" ]; then
-          /usr/bin/xattr -r -d com.apple.quarantine "$APP" 2>/dev/null || true
+        mkdir -p "$HOME/Applications"
+        ln -sf "$SRC" "$DEST"
+        /usr/bin/xattr -r -d com.apple.quarantine "$SRC" 2>/dev/null || true
 
-          ${lib.optionalString cfg.defaultMailClient ''
-            ${pkgs.duti}/bin/duti -s ${bundleId} mailto  2>/dev/null || true
-          ''}
-          ${lib.optionalString cfg.defaultCalendarClient ''
-            ${pkgs.duti}/bin/duti -s ${bundleId} webcal  2>/dev/null || true
-          ''}
-        fi
+        ${lib.optionalString cfg.defaultMailClient ''
+          ${pkgs.duti}/bin/duti -s ${bundleId} mailto  2>/dev/null || true
+        ''}
+        ${lib.optionalString cfg.defaultCalendarClient ''
+          ${pkgs.duti}/bin/duti -s ${bundleId} webcal  2>/dev/null || true
+        ''}
       '';
     };
   };
