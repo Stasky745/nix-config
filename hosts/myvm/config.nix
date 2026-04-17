@@ -10,7 +10,8 @@
         desktop = enabled;
         code    = enabled;
       };
-      ghostty = enabled;
+      ghostty     = enabled;
+      onepassword = enabled;
     };
     base.zsh = enabled;
   };
