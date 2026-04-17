@@ -27,7 +27,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${username} = { ... }: {
+    home-manager.users.${username} = { lib, ... }: {
       home.activation.gitLocalConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         if [ ! -f "$HOME/.gitconfig.local" ]; then
           echo ""
