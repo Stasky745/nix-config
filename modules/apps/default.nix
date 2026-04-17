@@ -1,7 +1,8 @@
 { ... }:
 {
   imports = [
-    ./tart.nix
+    ./claude.nix
     ./ghostty.nix
+    ./tart.nix
   ];
 }

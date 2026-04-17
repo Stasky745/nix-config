@@ -1,4 +1,4 @@
-{ username, system, inputs, ... }:
+{ username, system, inputs, lib, ... }:
 
 let
   overlays = [
@@ -9,6 +9,8 @@ let
       };
     })
   ];
+  enabled  = { enable = true; };
+  disabled = { enable = false; };
 in
 {
   nixpkgs.hostPlatform       = system;
@@ -23,7 +25,9 @@ in
   system.primaryUser           = username;
   system.stateVersion          = 6;
 
+  _module.args = { inherit enabled disabled; };
+
   home-manager.useGlobalPkgs       = true;
   home-manager.backupFileExtension = "backup";
-  home-manager.extraSpecialArgs    = { inherit inputs username system; inherit (inputs) mailerlite; };
+  home-manager.extraSpecialArgs    = { inherit inputs username system enabled disabled; inherit (inputs) mailerlite; };
 }

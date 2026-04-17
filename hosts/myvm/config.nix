@@ -1,11 +1,19 @@
-{ username, ... }:
+{ username, enabled, ... }:
 {
   # ---- Homebrew ------------------------------------------------------------
   homebrew.enable = true;
 
   # ---- Module enable flags -------------------------------------------------
-  my.apps.ghostty.enable = true;
-  my.base.zsh.enable     = true;
+  my = {
+    apps = {
+      claude = {
+        desktop = enabled;
+        code    = enabled;
+      };
+      ghostty = enabled;
+    };
+    base.zsh = enabled;
+  };
 
   # ---- Home-manager --------------------------------------------------------
   home-manager.users.${username} = { ... }: {
