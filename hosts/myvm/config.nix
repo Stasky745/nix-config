@@ -24,7 +24,14 @@
 
     };
     base = {
-      git = enabled;
+      git = enabled // {
+        extraConfig = {
+          "user".signingkey        = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINGKYSpzplBfzCBhRh8OqLnVlTZ6kFOEA7htzd2dk2I/";
+          "gpg".format             = "ssh";
+          "gpg \"ssh\"".program    = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+          "commit".gpgsign         = true;
+        };
+      };
       ssh = enabled // {
         use1PasswordAgent      = true;
         globalOptions."SetEnv" = "TERM=xterm-256color";
