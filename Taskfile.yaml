@@ -38,9 +38,27 @@ tasks:
         fi
 
   update:
+    deps: [update-betterbird]
     cmds:
       - nix flake update
-    desc: Update the flake.lock file
+    desc: Update the flake.lock file and all pinned app versions
+
+  update-betterbird:
+    internal: true
+    cmds:
+      - |
+        LATEST_URL=$(curl -sI "https://www.betterbird.eu/downloads/get.php?os=mac&lang=en-US&version=release" | grep -i "^location:" | sed 's/[Ll]ocation: //' | tr -d '\r\n')
+        VERSION=$(basename "$LATEST_URL" | sed 's/betterbird-//' | sed 's/.en-US.mac.dmg//')
+        CURRENT=$(grep 'version = ' modules/apps/betterbird.nix | sed 's/.*version = "\(.*\)".*/\1/')
+        if [ "$VERSION" = "$CURRENT" ]; then
+          echo "betterbird already at $VERSION"
+        else
+          echo "updating betterbird $CURRENT → $VERSION"
+          HASH=$(nix-prefetch-url --type sha256 "$LATEST_URL" 2>/dev/null)
+          HASH_SRI=$(nix hash convert --hash-algo sha256 "$HASH")
+          sed -i '' "s/version = \"$CURRENT\"/version = \"$VERSION\"/" modules/apps/betterbird.nix
+          sed -i '' "s|sha256 = \".*\"|sha256 = \"$HASH_SRI\"|" modules/apps/betterbird.nix
+        fi
 
   update-mailerlite:
     cmds:

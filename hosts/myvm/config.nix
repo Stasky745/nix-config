@@ -6,11 +6,14 @@
   # ---- Module enable flags -------------------------------------------------
   my = {
     apps = {
+      betterbird = enabled // { defaultMailClient = true; defaultCalendarClient = true; };
+      brave      = enabled // { defaultBrowser = true; };
       claude = {
         desktop = enabled;
         code    = enabled;
       };
       ghostty     = enabled;
+      vscode      = enabled;
       onepassword = enabled // {
         sshAgent = enabled // {
           vaults = [
