@@ -20,7 +20,7 @@ in
     (lib.mkIf cfg.defaultBrowser {
       home-manager.users.${username} = { lib, ... }: {
         home.activation.setDefaultBrowser = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          ${pkgs.defaultbrowser}/bin/defaultbrowser brave
+          ${pkgs.defaultbrowser}/bin/defaultbrowser com.brave.Browser
         '';
       };
     })
