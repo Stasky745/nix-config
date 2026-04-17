@@ -41,6 +41,7 @@ in
         DEST="$HOME/Applications/Betterbird.app"
 
         mkdir -p "$HOME/Applications"
+        rm -rf "$DEST"
         ln -sf "$SRC" "$DEST"
         /usr/bin/xattr -r -d com.apple.quarantine "$SRC" 2>/dev/null || true
 
