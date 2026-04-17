@@ -20,9 +20,9 @@ in
     (lib.mkIf cfg.defaultBrowser {
       home-manager.users.${username} = { lib, ... }: {
         home.activation.setDefaultBrowser = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          ${pkgs.duti}/bin/duti -s com.brave.Browser http
-          ${pkgs.duti}/bin/duti -s com.brave.Browser https
-          ${pkgs.duti}/bin/duti -s com.brave.Browser public.html
+          ${pkgs.duti}/bin/duti -s com.brave.Browser http    2>/dev/null || true
+          ${pkgs.duti}/bin/duti -s com.brave.Browser https   2>/dev/null || true
+          ${pkgs.duti}/bin/duti -s com.brave.Browser public.html 2>/dev/null || true
         '';
       };
     })

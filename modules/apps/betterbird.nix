@@ -43,10 +43,10 @@ in
           /usr/bin/xattr -r -d com.apple.quarantine "$APP" 2>/dev/null || true
 
           ${lib.optionalString cfg.defaultMailClient ''
-            ${pkgs.duti}/bin/duti -s ${bundleId} mailto
+            ${pkgs.duti}/bin/duti -s ${bundleId} mailto  2>/dev/null || true
           ''}
           ${lib.optionalString cfg.defaultCalendarClient ''
-            ${pkgs.duti}/bin/duti -s ${bundleId} webcal
+            ${pkgs.duti}/bin/duti -s ${bundleId} webcal  2>/dev/null || true
           ''}
         fi
       '';
