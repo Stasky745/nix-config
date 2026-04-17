@@ -22,6 +22,7 @@
     };
     base = {
       ssh = enabled // {
+        use1PasswordAgent      = true;
         globalOptions."SetEnv" = "TERM=xterm-256color";
       };
       zsh = enabled;

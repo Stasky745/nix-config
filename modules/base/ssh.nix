@@ -16,6 +16,7 @@ in
       default     = [];
       description = "Paths prepended as Include directives at the top of the SSH config";
     };
+    use1PasswordAgent = lib.mkEnableOption "1Password SSH agent socket as IdentityAgent";
     globalOptions = lib.mkOption {
       type        = lib.types.attrsOf lib.types.str;
       default     = {};
@@ -31,18 +32,19 @@ in
   config = lib.mkIf cfg.enable {
     home-manager.users.${username} = { ... }: {
       programs.ssh = {
-        enable              = true;
-        compression         = true;
-        serverAliveInterval = 60;
-
+        enable   = true;
         includes = cfg.extraIncludes;
 
         matchBlocks = {
           "*" = {
-            user           = cfg.username;
-            forwardAgent   = false;
-            identitiesOnly = true;
-            extraOptions   = { AddKeysToAgent = "yes"; } // cfg.globalOptions;
+            user                = cfg.username;
+            forwardAgent        = false;
+            identitiesOnly      = true;
+            compression         = true;
+            serverAliveInterval = 60;
+            extraOptions        = { AddKeysToAgent = "yes"; }
+              // lib.optionalAttrs cfg.use1PasswordAgent { IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""; }
+              // cfg.globalOptions;
           };
         };
 
