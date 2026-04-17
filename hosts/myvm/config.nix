@@ -22,10 +22,7 @@
     };
     base = {
       ssh = enabled // {
-        extraConfig = ''
-          Host *
-            SetEnv TERM=xterm-256color
-        '';
+        globalOptions."SetEnv" = "TERM=xterm-256color";
       };
       zsh = enabled;
     };

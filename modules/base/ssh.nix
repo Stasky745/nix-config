@@ -16,10 +16,15 @@ in
       default     = [];
       description = "Paths prepended as Include directives at the top of the SSH config";
     };
+    globalOptions = lib.mkOption {
+      type        = lib.types.attrsOf lib.types.str;
+      default     = {};
+      description = "Extra options merged into the Host * block";
+    };
     extraConfig = lib.mkOption {
       type        = lib.types.lines;
       default     = "";
-      description = "Additional SSH config appended after the defaults";
+      description = "Additional SSH config appended after all blocks";
     };
   };
 
@@ -37,9 +42,7 @@ in
             user           = cfg.username;
             forwardAgent   = false;
             identitiesOnly = true;
-            extraOptions   = {
-              AddKeysToAgent = "yes";
-            };
+            extraOptions   = { AddKeysToAgent = "yes"; } // cfg.globalOptions;
           };
         };
 
