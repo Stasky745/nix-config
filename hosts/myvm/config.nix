@@ -11,9 +11,24 @@
         code    = enabled;
       };
       ghostty     = enabled;
-      onepassword = enabled;
+      onepassword = enabled // {
+        sshAgent = enabled // {
+          vaults = [
+            { vault = "HomeOps"; }
+          ];
+        };
+      };
+
     };
-    base.zsh = enabled;
+    base = {
+      ssh = enabled // {
+        extraConfig = ''
+          Host *
+            SetEnv TERM=xterm-256color
+        '';
+      };
+      zsh = enabled;
+    };
   };
 
   # ---- Home-manager --------------------------------------------------------
