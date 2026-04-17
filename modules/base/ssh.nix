@@ -29,10 +29,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home-manager.users.${username} = { ... }: {
-      home.file.".ssh/config" = {
-        text = configText;
-        mode = "0600";
-      };
+      home.file.".ssh/config".text = configText;
     };
   };
 }
