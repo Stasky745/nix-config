@@ -1,0 +1,7 @@
+theme = mytheme
+
+# Terminal
+term = xterm-256color
+
+# Keybindings
+keybind = cmd+plus=unbind
