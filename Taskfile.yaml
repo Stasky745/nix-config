@@ -6,6 +6,9 @@ vars:
   HOME_DIR: /Users/{{.USERNAME}}
   HOSTNAME:
     sh: "(scutil --get ComputerName 2>/dev/null || uname -n) | tr -cd 'A-Za-z0-9-' | tr ' ' '-'"
+  ML_PATH: /Users/{{.USERNAME}}/.config/mailerlite/nix-config
+  ML_OVERRIDE:
+    sh: "[ -d '{{.ML_PATH}}' ] || echo '--override-input mailerlite path:./stubs/mailerlite'"
 
 tasks:
   default:
@@ -21,8 +24,7 @@ tasks:
     internal: true
     silent: true
     cmds:
-      - |
-        nix build .#darwinConfigurations.{{.HOSTNAME}}.system --impure --show-trace --refresh
+      - nix build .#darwinConfigurations.{{.HOSTNAME}}.system --impure --show-trace --refresh {{.ML_OVERRIDE}}
 
   switch-config:
     internal: true
@@ -30,9 +32,9 @@ tasks:
     cmds:
       - |
         if command -v darwin-rebuild &> /dev/null; then
-          sudo darwin-rebuild switch --flake .#{{.HOSTNAME}} --impure --show-trace --refresh
+          sudo darwin-rebuild switch --flake .#{{.HOSTNAME}} --impure --show-trace --refresh {{.ML_OVERRIDE}}
         else
-          sudo nix run nix-darwin -- switch --flake .#{{.HOSTNAME}} --impure --show-trace --refresh
+          sudo nix run nix-darwin -- switch --flake .#{{.HOSTNAME}} --impure --show-trace --refresh {{.ML_OVERRIDE}}
         fi
 
   update:
@@ -42,7 +44,12 @@ tasks:
 
   update-mailerlite:
     cmds:
-      - nix flake update mailerlite
+      - |
+        if [ -d "{{.ML_PATH}}" ]; then
+          nix flake update mailerlite
+        else
+          echo "mailerlite path not present on this machine, skipping"
+        fi
     desc: Update the mailerlite input in the flake.lock file
 
   update-hash:

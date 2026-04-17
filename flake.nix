@@ -15,7 +15,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # MailerLite shared configuration
+    # MailerLite shared configuration (work machine only).
+    # On personal machines, override with: --override-input mailerlite path:./stubs/mailerlite
     mailerlite = {
       url = "path:/Users/rocriberablasi/.config/mailerlite/nix-config";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
