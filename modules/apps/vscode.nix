@@ -32,8 +32,8 @@ in
 
     system.defaults.dock.persistent-apps = lib.mkIf cfg.dock [ "/Applications/Visual Studio Code.app" ];
 
-    home-manager.users.${username} = { pkgs, ... }: {
-      home.packages = with pkgs.vscode-extensions; [
+    home-manager.users.${username} = { pkgs, lib, ... }: let
+      extensions = with pkgs.vscode-extensions; [
         # Nix
         bbenoist.nix
 
@@ -70,6 +70,17 @@ in
         gruntfuggly.todo-tree
         yzhang.markdown-all-in-one
       ];
+    in {
+      home.activation.vscodeExtensions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        extDir="$HOME/.vscode/extensions"
+        $DRY_RUN_CMD mkdir -p "$extDir"
+        ${lib.concatMapStrings (ext: ''
+          for d in "${ext}/share/vscode/extensions"/*/; do
+            [ -d "$d" ] || continue
+            $DRY_RUN_CMD ln -sfn "$d" "$extDir/$(basename "$d")"
+          done
+        '') extensions}
+      '';
 
       home.file."Library/Application Support/Code/User/settings.json".text =
         builtins.toJSON (
