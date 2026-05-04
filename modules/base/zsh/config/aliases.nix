@@ -11,6 +11,7 @@
 
     # Kubernetes shortcuts
     k = "kubectl";
+    kx = "kubectx";
     k9s = "k9s --logoless";
 
     myvm = "tart run --net-bridged en0 --dir=repos:~/repos/stasky myvm";
