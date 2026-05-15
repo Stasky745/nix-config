@@ -3,7 +3,7 @@
 {
   # Session variables (available in all shells)
   home.sessionVariables = {
-    EDITOR = "code -w";
+    EDITOR = "zed --wait";
     XDG_CONFIG_HOME = "$HOME/.config";
   };
 
