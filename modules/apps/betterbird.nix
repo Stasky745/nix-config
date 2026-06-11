@@ -6,11 +6,11 @@ let
 
   package = pkgs.stdenv.mkDerivation rec {
     pname   = "betterbird";
-    version = "140.9.0esr-bb20";
+    version = "140.11.0esr-bb23";
 
     src = pkgs.fetchurl {
       url    = "https://www.betterbird.eu/downloads/MacDiskImage/betterbird-${version}.en-US.mac.dmg";
-      sha256 = "sha256-v2dKoyGdMySiWyRdLPbJRjCe6ggpp4f0AZ/Fvyj1ALY=";
+      sha256 = "sha256-1qzfJWd513U5uX1I+Z5dq8yTGoekJQsz1eGsCgUAP9M=";
     };
 
     nativeBuildInputs = [ pkgs.undmg ];

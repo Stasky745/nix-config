@@ -6,7 +6,7 @@
   # ---- Module enable flags -------------------------------------------------
   my = {
     apps = {
-      betterbird = enabled // { defaultMailClient = true; defaultCalendarClient = true; };
+      # betterbird = enabled // { defaultMailClient = true; defaultCalendarClient = true; };
       brave      = enabled // { defaultBrowser = true; };
       claude = {
         desktop = enabled;
