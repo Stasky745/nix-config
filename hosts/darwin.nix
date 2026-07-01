@@ -22,6 +22,11 @@ in
   nix.enable          = false;
   programs.zsh.enable = false;
 
+  nix.settings = {
+    substituters = [ "https://nkl-sofka.cachix.org" ];
+    trusted-public-keys = [ "nkl-sofka.cachix.org-1:hLg9frFNJynrxe7SSBb/p6pbawlpZmG10bw+wLsTufw=" ];
+  };
+
   users.users.${username}.home = "/Users/${username}";
   system.primaryUser           = username;
   system.stateVersion          = 6;
