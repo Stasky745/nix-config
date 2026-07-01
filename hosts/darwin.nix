@@ -2,6 +2,7 @@
 
 let
   overlays = [
+    inputs.sofka.overlays.default
     (final: _prev: {
       stable = import inputs.nixpkgs-stable {
         system = final.stdenv.hostPlatform.system;

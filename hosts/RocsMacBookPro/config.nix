@@ -5,6 +5,7 @@
 
   # ---- Module enable flags -------------------------------------------------
   my.apps.tart.enable    = true;
+  my.apps.sofka.enable   = true;
   my.base.zsh.enable     = true;
 
   # ---- Home-manager --------------------------------------------------------

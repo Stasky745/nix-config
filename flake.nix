@@ -15,6 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sofka = {
+      url = "github:nklmilojevic/sofka";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # MailerLite shared configuration (work machine only).
     # On personal machines, override with: --override-input mailerlite path:./stubs/mailerlite
     mailerlite = {
