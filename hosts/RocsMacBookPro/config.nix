@@ -9,7 +9,7 @@
   my.base.zsh.enable     = true;
 
   # ---- Home-manager --------------------------------------------------------
-  home-manager.users.${username} = { pkgs, ... }: {
+  home-manager.users.${username} = { pkgs, lib, ... }: {
     imports = [ mailerlite.modules.home-manager.defaults ];
 
     home.stateVersion              = "25.05";
@@ -34,5 +34,16 @@
     };
 
     home.packages = mailerlite.pkgs.${system}.sre;
+
+    # Override 1Password agent config: use HomeOps vault instead of Private
+    home.file.".config/1Password/ssh/agent.toml".text = lib.mkForce ''
+      [[ssh-keys]]
+      vault = "Employee"
+      [[ssh-keys]]
+      vault = "HomeOps"
+      [[ssh-keys]]
+      item = "Ansible SSH key"
+      vault = "SRE"
+    '';
   };
 }

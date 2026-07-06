@@ -15,5 +15,6 @@
     "$HOME/.npm-global/bin"
     "$HOME/.istioctl/bin"
     "/opt/homebrew/bin"
+    "/Library/Frameworks/Python.framework/Versions/3.11/bin" # Pip
   ];
 }
