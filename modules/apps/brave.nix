@@ -6,15 +6,12 @@ in
 {
   options.my.apps.brave = {
     enable         = lib.mkEnableOption "Brave browser";
-    dock           = lib.mkEnableOption "pin to dock" // { default = true; };
     defaultBrowser = lib.mkEnableOption "set as default browser";
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       homebrew.casks = [ "brave-browser" ];
-
-      system.defaults.dock.persistent-apps = lib.mkIf cfg.dock [ "/Applications/Brave Browser.app" ];
     }
 
     (lib.mkIf cfg.defaultBrowser {

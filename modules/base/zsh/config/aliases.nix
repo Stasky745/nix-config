@@ -13,6 +13,7 @@
     k = "kubectl";
     kx = "kubectx";
     k9s = "k9s --logoless";
+    s = "sofka";
 
     myvm = "tart run --net-bridged en0 --dir=repos:~/repos/stasky myvm";
   };

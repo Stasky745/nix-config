@@ -6,7 +6,6 @@ in
 {
   options.my.apps.vscode = {
     enable = lib.mkEnableOption "Visual Studio Code";
-    dock   = lib.mkEnableOption "pin to dock" // { default = true; };
 
     sopsAgeKeyFile = lib.mkOption {
       type        = lib.types.nullOr lib.types.str;
@@ -29,8 +28,6 @@ in
 
   config = lib.mkIf cfg.enable {
     homebrew.casks = [ "visual-studio-code" ];
-
-    system.defaults.dock.persistent-apps = lib.mkIf cfg.dock [ "/Applications/Visual Studio Code.app" ];
 
     home-manager.users.${username} = { pkgs, lib, ... }: let
       extensions = with pkgs.vscode-extensions; [

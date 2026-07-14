@@ -11,7 +11,6 @@ in
 {
   options.my.apps.onepassword = {
     enable   = lib.mkEnableOption "1Password password manager";
-    dock     = lib.mkEnableOption "pin to dock" // { default = true; };
     sshAgent = {
       enable = lib.mkEnableOption "1Password SSH agent";
       vaults = lib.mkOption {
@@ -30,8 +29,6 @@ in
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       homebrew.casks = [ "1password" ];
-
-      system.defaults.dock.persistent-apps = lib.mkIf cfg.dock [ "/Applications/1Password.app" ];
     }
 
     (lib.mkIf cfg.sshAgent.enable {

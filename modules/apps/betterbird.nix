@@ -25,14 +25,11 @@ in
 {
   options.my.apps.betterbird = {
     enable                = lib.mkEnableOption "Betterbird email client";
-    dock                  = lib.mkEnableOption "pin to dock" // { default = true; };
     defaultMailClient     = lib.mkEnableOption "set as default mail client";
     defaultCalendarClient = lib.mkEnableOption "set as default calendar client";
   };
 
   config = lib.mkIf cfg.enable {
-    system.defaults.dock.persistent-apps = lib.mkIf cfg.dock [ "/Users/${username}/Applications/Betterbird.app" ];
-
     home-manager.users.${username} = { lib, ... }: {
       home.packages = [ package ];
 

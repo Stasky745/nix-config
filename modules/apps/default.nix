@@ -9,5 +9,6 @@
     ./sofka.nix
     ./tart.nix
     ./vscode.nix
+    ./zed
   ];
 }
