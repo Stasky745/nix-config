@@ -41,6 +41,13 @@
       [[ssh-keys]]
       vault = "Employee"
       [[ssh-keys]]
+      item = "Robin - root"
+      vault = "HomeOps"
+      [[ssh-keys]]
+      item = "OpenWrt SSH Key"
+      vault = "HomeOps"
+      [[ssh-keys]]
+      item = "SSH Key - Netcup VPS"
       vault = "HomeOps"
       [[ssh-keys]]
       item = "Ansible SSH key"
