@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  home.packages = [ pkgs.fnox ];
+
   # Enable direnv - loads environment variables from .envrc files
   programs.direnv = {
     enable = true;
@@ -27,6 +29,7 @@
   # Note: mise doesn't have a home-manager module yet, so we use manual integration
   programs.zsh.initContent = ''
     eval "$(${pkgs.mise}/bin/mise activate zsh)"
+    eval "$(${pkgs.fnox}/bin/fnox activate zsh)"
   '';
 
   # Note: The plugins from zsh.plugins (zsh-autosuggestions and zsh-syntax-highlighting)

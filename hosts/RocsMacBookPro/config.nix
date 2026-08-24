@@ -30,6 +30,18 @@
         extraConfig       = ''
           Host *
             SetEnv TERM=xterm-256color
+
+          Host robin
+            HostName 192.168.42.20
+            User root
+
+          Host relay
+            HostName 45.129.181.33
+            User root
+
+          Host nami
+            HostName 192.168.0.1
+            User root
         '';
       };
     };

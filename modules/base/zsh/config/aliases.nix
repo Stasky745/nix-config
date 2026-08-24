@@ -5,6 +5,7 @@
     # Public aliases - safe to commit
     # macOS ls with color support
     ls = "ls --color=auto";
+    grep = "grep --color=auto";
 
     # Editor
     vi = "nvim";
