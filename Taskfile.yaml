@@ -20,11 +20,11 @@ tasks:
       - nix-collect-garbage
     desc: Tidy up the nix store
 
-  build-config:
-    internal: true
+  build-check:
     silent: true
     cmds:
-      - nix build .#darwinConfigurations.{{.HOSTNAME}}.system --impure --show-trace --refresh {{.ML_OVERRIDE}}
+      - nix build .#darwinConfigurations.{{.HOSTNAME}}.system --impure --show-trace {{.ML_OVERRIDE}}
+    desc: "Build (but don't switch) the configuration, to sanity-check it before applying"
 
   switch-config:
     internal: true
@@ -32,9 +32,9 @@ tasks:
     cmds:
       - |
         if command -v darwin-rebuild &> /dev/null; then
-          sudo darwin-rebuild switch --flake .#{{.HOSTNAME}} --impure --show-trace --refresh {{.ML_OVERRIDE}}
+          sudo darwin-rebuild switch --flake .#{{.HOSTNAME}} --impure --show-trace {{.ML_OVERRIDE}}
         else
-          sudo nix run nix-darwin -- switch --flake .#{{.HOSTNAME}} --impure --show-trace --refresh {{.ML_OVERRIDE}}
+          sudo nix run nix-darwin -- switch --flake .#{{.HOSTNAME}} --impure --show-trace {{.ML_OVERRIDE}}
         fi
 
   update:
@@ -61,6 +61,8 @@ tasks:
   #       fi
 
   update-mailerlite:
+    silent: true
+    internal: true
     cmds:
       - |
         if [ -d "{{.ML_PATH}}" ]; then
@@ -70,6 +72,20 @@ tasks:
         fi
     desc: Update the mailerlite input in the flake.lock file
 
+  update-claude-code:
+    silent: true
+    internal: true
+    cmds:
+      - nix flake update claude-code-overlay
+    desc: Update the claude-code-overlay input in the flake.lock file
+
+  update-sofka:
+    silent: true
+    internal: true
+    cmds:
+      - nix flake update sofka
+    desc: Update the sofka input in the flake.lock file
+
   update-hash:
     internal: true
     cmds:
@@ -77,9 +93,8 @@ tasks:
     desc: Update the stored hash after successful build
 
   build:
-    deps: [update-mailerlite]
+    deps: [update-mailerlite, update-claude-code, update-sofka]
     cmds:
-      - task: build-config
       - task: switch-config
       - task: update-hash
     desc: Build and apply the new configuration based on the OS
