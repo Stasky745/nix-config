@@ -1,9 +1,9 @@
 { ... }:
 {
   imports = [
-    ./betterbird.nix
     ./brave.nix
     ./claude.nix
+    ./cmux
     ./ghostty
     ./onepassword.nix
     ./sofka.nix

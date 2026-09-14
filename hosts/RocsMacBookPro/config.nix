@@ -1,5 +1,8 @@
 { username, system, mailerlite, pkgs, ... }:
 {
+  # ---- Homebrew ------------------------------------------------------------
+  homebrew.enable = true;
+
   # ---- MailerLite darwin-level config --------------------------------------
   mailerlite.team = "sre";
 
@@ -7,6 +10,8 @@
   my.apps.tart.enable    = true;
   my.apps.sofka.enable   = true;
   my.apps.zed.enable     = true;
+  my.apps.ghostty.enable = true;
+  my.apps.cmux.enable    = true;
   my.base.zsh.enable     = true;
 
   # ---- Home-manager --------------------------------------------------------
@@ -16,9 +21,7 @@
     home.stateVersion              = "25.05";
     home.enableNixpkgsReleaseCheck = false;
 
-    # Workaround: home-manager passes string instead of list to pathsToLink
-    # https://github.com/nix-community/home-manager/issues/8163
-    targets.darwin.linkApps.enable                                = false;
+    # Workaround for a related Darwin bug.
     home.file."Library/Fonts/.home-manager-fonts-version".enable = false;
 
     mailerlite = {

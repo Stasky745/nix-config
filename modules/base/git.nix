@@ -47,7 +47,7 @@ in
 
         includes = [{ path = "~/.gitconfig.local"; }];
 
-        extraConfig = {
+        settings = {
           init.defaultBranch = cfg.defaultBranch;
 
           push = {
