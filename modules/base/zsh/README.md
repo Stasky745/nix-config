@@ -42,7 +42,7 @@ A modular Nix configuration for ZSH with sensible defaults, custom functions, an
 - Works in both standard terminals and VSCode integrated terminal
 
 ### Environment
-- `EDITOR` - Set to `code -w` (VSCode)
+- `EDITOR` / `TERMINAL` - Set by whichever app has `defaultEditor`/`defaultTerminal` enabled (see `modules/apps/zed/`, `modules/apps/cmux/`), not by this module
 - `XDG_CONFIG_HOME` - Set to `$HOME/.config`
 - **PATH additions** - Go, local binaries, npm global, istioctl, Homebrew
 

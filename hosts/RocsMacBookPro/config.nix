@@ -7,12 +7,14 @@
   mailerlite.team = "sre";
 
   # ---- Module enable flags -------------------------------------------------
-  my.apps.tart.enable    = true;
-  my.apps.sofka.enable   = true;
-  my.apps.zed.enable     = true;
-  my.apps.ghostty.enable = true;
-  my.apps.cmux.enable    = true;
-  my.base.zsh.enable     = true;
+  my.apps.tart.enable          = true;
+  my.apps.sofka.enable         = true;
+  my.apps.zed.enable           = true;
+  my.apps.zed.defaultEditor    = true;
+  my.apps.ghostty.enable       = true;
+  my.apps.cmux.enable          = true;
+  my.apps.cmux.defaultTerminal = true;
+  my.base.zsh.enable           = true;
 
   # ---- Home-manager --------------------------------------------------------
   home-manager.users.${username} = { pkgs, lib, ... }: {

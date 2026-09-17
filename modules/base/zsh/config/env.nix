@@ -2,8 +2,8 @@
 
 {
   # Session variables (available in all shells)
+  # EDITOR/TERMINAL are set by whichever app module has defaultEditor/defaultTerminal enabled.
   home.sessionVariables = {
-    EDITOR = "zed --wait";
     XDG_CONFIG_HOME = "$HOME/.config";
   };
 
