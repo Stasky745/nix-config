@@ -15,8 +15,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sofka = {
-      url = "github:nklmilojevic/sofka";
+    # Not following our nixpkgs on purpose: sofka's own CI publishes pre-built
+    # binaries to nkl-sofka.cachix.org for its pinned nixpkgs (nixos-26.05).
+    # Following ours would rebuild it from source on every nixpkgs bump — a
+    # different derivation hash that the cache never has.
+    sofka.url = "github:nklmilojevic/sofka";
+
+    thurm = {
+      url = "github:nklmilojevic/thurm";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

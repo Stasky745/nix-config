@@ -15,6 +15,15 @@
     "$HOME/.npm-global/bin"
     "$HOME/.istioctl/bin"
     "/opt/homebrew/bin"
-    "/Library/Frameworks/Python.framework/Versions/3.11/bin" # Pip
   ];
+
+  # /etc/zprofile's path_helper runs after ~/.zshenv (where sessionPath above
+  # lands) and re-sorts PATH, pushing /usr/bin ahead of nix-provided tools;
+  # re-prepend nix profiles here, in ~/.zprofile, which runs after path_helper.
+  # Needed so `python3` resolves to nix's (my.apps.python) instead of the
+  # broken /usr/bin/python3 xcode-select shim.
+  programs.zsh.profileExtra = ''
+    path=($HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin $path)
+    typeset -U path
+  '';
 }

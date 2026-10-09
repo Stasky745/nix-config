@@ -9,6 +9,15 @@ vars:
   ML_PATH: /Users/{{.USERNAME}}/.config/mailerlite/nix-config
   ML_OVERRIDE:
     sh: "[ -d '{{.ML_PATH}}' ] || echo '--override-input mailerlite path:./stubs/mailerlite'"
+  # nix.enable = false (see hosts/darwin.nix) makes nix-darwin's nix.settings a
+  # no-op — nix.settings.substituters is never actually written to
+  # /etc/nix/nix.conf, so sofka's cache has to be passed as CLI flags instead.
+  # Must use `--option name value`, not `--extra-substituters`/
+  # `--extra-trusted-public-keys`: darwin-rebuild's own arg parser only
+  # recognizes a fixed flag whitelist (incl. --option) and rejects anything else.
+  SOFKA_CACHE: >-
+    --option extra-substituters https://nkl-sofka.cachix.org
+    --option extra-trusted-public-keys nkl-sofka.cachix.org-1:hLg9frFNJynrxe7SSBb/p6pbawlpZmG10bw+wLsTufw=
 
 tasks:
   default:
@@ -23,7 +32,7 @@ tasks:
   build-check:
     silent: true
     cmds:
-      - nix build .#darwinConfigurations.{{.HOSTNAME}}.system --impure --show-trace --max-jobs 4 {{.ML_OVERRIDE}}
+      - nix build .#darwinConfigurations.{{.HOSTNAME}}.system --impure --show-trace --max-jobs 4 {{.SOFKA_CACHE}} {{.ML_OVERRIDE}}
     desc: "Build (but don't switch) the configuration, to sanity-check it before applying"
 
   switch-config:
@@ -32,9 +41,9 @@ tasks:
     cmds:
       - |
         if command -v darwin-rebuild &> /dev/null; then
-          sudo darwin-rebuild switch --flake .#{{.HOSTNAME}} --impure --show-trace --max-jobs 4 {{.ML_OVERRIDE}}
+          sudo darwin-rebuild switch --flake .#{{.HOSTNAME}} --impure --show-trace --max-jobs 4 {{.SOFKA_CACHE}} {{.ML_OVERRIDE}}
         else
-          sudo nix run nix-darwin -- switch --flake .#{{.HOSTNAME}} --impure --show-trace --max-jobs 4 {{.ML_OVERRIDE}}
+          sudo nix run nix-darwin -- switch --flake .#{{.HOSTNAME}} --impure --show-trace --max-jobs 4 {{.SOFKA_CACHE}} {{.ML_OVERRIDE}}
         fi
 
   update:
@@ -42,31 +51,21 @@ tasks:
       - nix flake update
     desc: Update the flake.lock file and all pinned app versions
 
-  update-mailerlite:
+  # Single combined call: updates mailerlite (and its own nested inputs, e.g.
+  # claude-code-overlay) and sofka in one lock-file pass instead of 3 separate
+  # `nix flake update` invocations racing on the same flake.lock/git input.
+  update-pinned:
     silent: true
     internal: true
     cmds:
       - |
         if [ -d "{{.ML_PATH}}" ]; then
-          nix flake update mailerlite
+          nix flake update mailerlite sofka
         else
-          echo "mailerlite path not present on this machine, skipping"
+          echo "mailerlite path not present on this machine, skipping mailerlite update"
+          nix flake update sofka
         fi
-    desc: Update the mailerlite input in the flake.lock file
-
-  update-claude-code:
-    silent: true
-    internal: true
-    cmds:
-      - nix flake update claude-code-overlay
-    desc: Update the claude-code-overlay input in the flake.lock file
-
-  update-sofka:
-    silent: true
-    internal: true
-    cmds:
-      - nix flake update sofka
-    desc: Update the sofka input in the flake.lock file
+    desc: Update the mailerlite and sofka inputs in the flake.lock file
 
   update-hash:
     internal: true
@@ -75,8 +74,8 @@ tasks:
     desc: Update the stored hash after successful build
 
   build:
-    deps: [update-mailerlite, update-claude-code, update-sofka]
     cmds:
+      - task: update-pinned
       - task: switch-config
       - task: update-hash
     desc: Build and apply the new configuration based on the OS

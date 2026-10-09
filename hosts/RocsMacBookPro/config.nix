@@ -9,11 +9,13 @@
   # ---- Module enable flags -------------------------------------------------
   my.apps.tart.enable          = true;
   my.apps.sofka.enable         = true;
+  my.apps.python.enable        = true;
   my.apps.zed.enable           = true;
   my.apps.zed.defaultEditor    = true;
   my.apps.ghostty.enable       = true;
   my.apps.cmux.enable          = true;
   my.apps.cmux.defaultTerminal = true;
+  my.apps.thurm.enable         = true;
   my.base.zsh.enable           = true;
 
   # ---- Home-manager --------------------------------------------------------
@@ -57,15 +59,19 @@
     home.file.".config/1Password/ssh/agent.toml".text = lib.mkForce ''
       [[ssh-keys]]
       vault = "Employee"
+
       [[ssh-keys]]
       item = "Robin - root"
-      vault = "HomeOps"
+      vault = "HomeInfra"
+
       [[ssh-keys]]
       item = "OpenWrt SSH Key"
-      vault = "HomeOps"
+      vault = "HomeInfra"
+
       [[ssh-keys]]
-      item = "SSH Key - Netcup VPS"
-      vault = "HomeOps"
+      item = "SSH Key - Netcup"
+      vault = "HomeInfra"
+
       [[ssh-keys]]
       item = "Ansible SSH key"
       vault = "SRE"
