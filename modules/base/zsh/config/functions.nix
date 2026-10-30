@@ -19,4 +19,7 @@ let
 in
 {
   programs.zsh.initContent = functionContents;
+
+  # gtag
+  home.packages = [ pkgs.svu ];
 }

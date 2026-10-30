@@ -30,7 +30,7 @@ k-oom() {
         ($pod.spec.nodeName // $def),
         .name,
         .restartCount,
-        (($pod.spec.containers[] | select(.name == .name) | .resources.limits.memory) // "none"),
+        (.name as $c | ($pod.spec.containers[] | select(.name == $c) | .resources.limits.memory) // "none"),
         ((.lastState.terminated.exitCode // .state.terminated.exitCode) // $def | tostring)
     ] | @tsv
     ' | while IFS=$'\t' read -r timestamp namespace pod node container restarts memory exit_code; do
@@ -52,7 +52,7 @@ k-oom() {
     # Display results
     if [[ -s "$temp_file" ]]; then
         # Print colored header
-        printf "${colors[time]}%-15s${colors[reset]}  " "KILLED_TIME"
+        printf "${colors[time]}%-15s${colors[reset]}  " "KILLED_UTC"
         printf "${colors[namespace]}%-20s${colors[reset]}  " "NAMESPACE"
         printf "${colors[pod]}%-40s${colors[reset]}  " "POD"
         printf "${colors[node]}%-20s${colors[reset]}  " "NODE"

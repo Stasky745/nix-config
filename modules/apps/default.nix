@@ -3,6 +3,7 @@
   imports = [
     ./brave.nix
     ./claude.nix
+    ./metla.nix
     ./cmux
     ./ghostty
     ./onepassword.nix

@@ -13,7 +13,6 @@
     # Kubernetes shortcuts
     k = "kubectl";
     kx = "kubectx";
-    k9s = "k9s --logoless";
     s = "sofka";
   };
 }

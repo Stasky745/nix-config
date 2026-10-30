@@ -1,50 +1,29 @@
-# Git pull and switch to branch (with stash support)
+# Update the default branch, then switch to (or create) a branch with it merged in; uncommitted changes carry over
 gps() {
     if [ -z "$1" ]; then
-        echo "Usage: gps <branch-name>"
+        echo "Usage: gps <branch-name>" >&2
         return 1
     fi
 
     local branch_name="$1"
-    local default_branch
-    local stashed=false
+    local default_branch current_branch
 
     default_branch="$(git_default_branch)" || return 1
+    current_branch="$(git branch --show-current)"
 
-    # Stash changes only if there are changes to stash
-    if ! git diff-index --quiet HEAD --; then
-        git stash
-        stashed=true
-    fi
-
-    # Switch to default branch and pull updates
-    gp || { _gps_abort_stash "$stashed"; return 1; }
-
-    # Switch to the target branch (create if it doesn't exist)
-    if git show-ref --verify --quiet "refs/heads/$branch_name"; then
-        git switch "$branch_name" || { _gps_abort_stash "$stashed"; return 1; }
-
-        # Merge default branch into the feature branch
-        if ! git merge "$default_branch"; then
-            echo ""
-            echo "Merge conflict with '$default_branch'."
-            echo "Resolve the conflicts, then run: git stash pop"
-            [ "$stashed" = true ] && echo "(You have stashed changes waiting.)"
-            return 1
-        fi
+    # Fast-forward the local default branch without switching to it
+    if [ "$current_branch" = "$default_branch" ]; then
+        git pull --ff-only || return 1
     else
-        git switch -c "$branch_name" || { _gps_abort_stash "$stashed"; return 1; }
+        git fetch origin "$default_branch:$default_branch" || return 1
     fi
 
-    # Unstash changes only if we stashed something
-    if [ "$stashed" = true ]; then
-        git stash pop
-    fi
-}
-
-_gps_abort_stash() {
-    if [ "$1" = true ]; then
-        echo "Something went wrong. Restoring stashed changes."
-        git stash pop
+    if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+        if [ "$current_branch" != "$branch_name" ]; then
+            git switch "$branch_name" || return 1
+        fi
+        git merge --autostash "$default_branch"
+    else
+        git switch -c "$branch_name" "$default_branch"
     fi
 }

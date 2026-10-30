@@ -7,8 +7,10 @@
   mailerlite.team = "sre";
 
   # ---- Module enable flags -------------------------------------------------
+  # my.apps.sofka is NOT enabled: mailerlite.modules.home-manager.defaults now
+  # installs sofka itself (mailerlite.sofka.enable, default true) — enabling
+  # both collides, since they're two different sofka-0.31.8 derivations.
   my.apps.tart.enable          = true;
-  my.apps.sofka.enable         = true;
   my.apps.python.enable        = true;
   my.apps.zed.enable           = true;
   my.apps.zed.defaultEditor    = true;
@@ -16,6 +18,7 @@
   my.apps.cmux.enable          = true;
   my.apps.cmux.defaultTerminal = true;
   my.apps.thurm.enable         = true;
+  my.apps.metla.enable         = true;
   my.base.zsh.enable           = true;
 
   # ---- Home-manager --------------------------------------------------------
@@ -69,7 +72,7 @@
       vault = "HomeInfra"
 
       [[ssh-keys]]
-      item = "SSH Key - Netcup"
+      item = "SSH Key - Netcup VPS"
       vault = "HomeInfra"
 
       [[ssh-keys]]

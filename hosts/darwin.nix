@@ -29,6 +29,7 @@ in
 
   home-manager.sharedModules = [
     inputs.thurm.homeManagerModules.default
+    inputs.metla.homeManagerModules.default
 
     {
       manual.manpages.enable = false;

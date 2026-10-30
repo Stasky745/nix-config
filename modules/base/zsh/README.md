@@ -31,8 +31,10 @@ A modular Nix configuration for ZSH with sensible defaults, custom functions, an
 
 **Git Workflows**
 - `gp` - Switch to main/master branch and pull latest changes
-- `gps <branch>` - Pull main, switch/create branch, merge main (with auto-stash)
-- `git-rm-br` - Clean up local branches (keeps main/master/current)
+- `gacp "<msg>" [path...]` - Stage everything (or only the given paths), commit and push
+- `gps <branch>` - Fast-forward main, switch/create branch, merge main (uncommitted changes carry over; no stash)
+- `gtag [tag]` - Pull main, create an annotated tag and push it; without a tag, proposes `svu next` (keeping the latest tag's prefix) and asks
+- `git tidy [-n] [-y] [repo...]` - Delete local branches merged into origin's default branch, including squash/rebase merges (`-n` dry run; e.g. `git tidy -n ~/repos/*/*`). Script in `config/scripts.d/` (installed as a command, not a shell function)
 
 **Kubernetes Utilities**
 - `k-oom [limit]` - Find and display OOM-killed pods with detailed info

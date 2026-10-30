@@ -26,6 +26,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    metla = {
+      url = "github:nklmilojevic/metla";
+      inputs.nixpkgs.follows      = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     # MailerLite shared configuration (work machine only).
     # On personal machines, override with: --override-input mailerlite path:./stubs/mailerlite
     mailerlite = {
@@ -50,7 +56,7 @@
 
       devShells."aarch64-darwin".default =
         nixpkgs.legacyPackages."aarch64-darwin".mkShell {
-          buildInputs = [ nixpkgs.legacyPackages."aarch64-darwin".go-task ];
+          buildInputs = with nixpkgs.legacyPackages."aarch64-darwin"; [ go-task lefthook betterleaks ];
         };
     };
 }
