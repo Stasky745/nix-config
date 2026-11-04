@@ -31,7 +31,7 @@ A modular Nix configuration for ZSH with sensible defaults, custom functions, an
 
 **Git Workflows**
 - `gp` - Switch to main/master branch and pull latest changes
-- `gacp "<msg>" [path...]` - Pull upstream changes first (`--autostash`, stops on conflicts), then stage everything (or only the given paths), commit and push
+- `gacp "<msg>" [path...]` - Pull upstream changes first (`--autostash`, stops on conflicts), then stage everything (or only the given paths), commit and push; with nothing to commit, still pushes unpushed commits
 - `gps <branch>` - Fast-forward main, switch/create branch, merge main (uncommitted changes carry over; no stash)
 - `gtag [tag]` - Pull main, create an annotated tag and push it; without a tag, proposes `svu next` (keeping the latest tag's prefix) and asks
 - `git tidy [-n] [-y] [repo...]` - Delete local branches merged into origin's default branch, including squash/rebase merges (`-n` dry run; e.g. `git tidy -n ~/repos/*/*`). Script in `config/scripts.d/` (installed as a command, not a shell function)

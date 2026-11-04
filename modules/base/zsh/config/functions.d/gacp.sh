@@ -27,5 +27,15 @@ gacp() {
         git add -- "$@" || return 1
     fi
 
-    git commit -m "$message" && git push
+    if ! git diff --cached --quiet; then
+        git commit -m "$message" || return 1
+    elif git rev-parse --verify --quiet "@{upstream}" >/dev/null &&
+        [ "$(git rev-list --count "@{upstream}..HEAD")" -eq 0 ]; then
+        echo "Nothing to commit or push" >&2
+        return 1
+    else
+        echo "Nothing to commit; pushing existing commits"
+    fi
+
+    git push
 }
